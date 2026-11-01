@@ -42,7 +42,6 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
-  crypto: { secret: process.env.SECRET || "thisisnotagoodsecret" },
   touchAfter: 24 * 3600, // only re-save an unchanged session once a day
 });
 
