@@ -1,0 +1,66 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container px-4 py-4" style="max-width: 800px;">
+  <h3 class="mb-3"><%= listing.title %></h3>
+  <img src="<%= listing.image.url %>" class="img-fluid rounded mb-3 w-100" style="max-height:420px; object-fit:cover;" alt="<%= listing.title %>">
+
+  <p class="text-muted mb-1">
+    Owned By <em><%= listing.owner ? listing.owner.username : "unknown" %></em>
+  </p>
+  <p><%= listing.description %></p>
+  <p class="fw-semibold">&#8377;<%= listing.price.toLocaleString("en-IN") %> / night</p>
+  <p class="mb-1"><%= listing.location %></p>
+  <p><%= listing.country %></p>
+
+  <% if (currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+    <div class="mb-4">
+      <a href="/listings/<%= listing._id %>/edit" class="btn btn-danger">Edit</a>
+      <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
+        <button class="btn btn-dark">Delete</button>
+      </form>
+    </div>
+  <% } %>
+
+  <hr>
+
+  <% if (currUser) { %>
+    <h5 class="mt-4">Leave a Review</h5>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation mb-4" novalidate>
+      <div class="mb-3">
+        <label class="form-label d-block">Rating</label>
+        <fieldset class="starability-basic">
+          <% for (let i = 5; i >= 1; i--) { %>
+            <input type="radio" id="rate<%= i %>" name="review[rating]" value="<%= i %>" <% if (i === 3) { %>checked<% } %> />
+            <label for="rate<%= i %>"><%= i %> stars</label>
+          <% } %>
+        </fieldset>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Comments</label>
+        <textarea name="review[comment]" class="form-control" rows="3" required></textarea>
+      </div>
+      <button class="btn btn-outline-dark">Submit</button>
+    </form>
+  <% } %>
+
+  <h5 class="mt-4">All Reviews</h5>
+  <div class="row">
+    <% for (let review of listing.reviews) { %>
+      <div class="col-md-6 mb-3">
+        <div class="border rounded p-3 h-100">
+          <p class="fw-semibold mb-1"><%= review.author ? review.author.username : "Anonymous" %></p>
+          <p class="mb-1">Rating: <%= review.rating %> / 5</p>
+          <p class="mb-2"><%= review.comment %></p>
+          <% if (currUser && review.author && currUser._id.equals(review.author._id)) { %>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+    <% if (listing.reviews.length === 0) { %>
+      <p class="text-muted">No reviews yet.</p>
+    <% } %>
+  </div>
+</div>

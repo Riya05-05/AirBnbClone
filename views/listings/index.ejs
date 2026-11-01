@@ -1,0 +1,27 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container-fluid px-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Explore listings</h4>
+    <a href="/listings/new" class="btn btn-danger">+ Create new listing</a>
+  </div>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <% for (let listing of allListings) { %>
+      <div class="col">
+        <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+          <div class="card h-100 border-0 listing-card">
+            <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="<%= listing.title %>">
+            <div class="card-body px-0 pt-2">
+              <p class="card-title fw-semibold mb-0 text-truncate"><%= listing.title %></p>
+              <p class="card-text text-muted small mb-0"><%= listing.location %>, <%= listing.country %></p>
+              <p class="card-text mb-0">&#8377;<%= listing.price.toLocaleString("en-IN") %> / night</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% } %>
+  </div>
+  <% if (allListings.length === 0) { %>
+    <p class="text-muted mt-4">No listings yet. Be the first to <a href="/listings/new">add one</a>.</p>
+  <% } %>
+</div>

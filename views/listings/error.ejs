@@ -1,0 +1,7 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container px-4 py-5 text-center">
+  <h1 class="display-4 text-danger"><%= err.statusCode || 500 %></h1>
+  <p class="lead"><%= err.message %></p>
+  <a href="/listings" class="btn btn-danger mt-3">Back to listings</a>
+</div>
